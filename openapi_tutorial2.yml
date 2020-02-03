@@ -7,11 +7,6 @@ info:
 servers:
   - url: https://example.io/v1
 
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
 security:
   - BasicAuth: []
 
@@ -38,18 +33,9 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  required:
-                    - username
-                  properties:
-                    artist_name:
-                      type: string
-                    artist_genre:
-                      type: string
-                    albums_recorded:
-                      type: integer
-                    username:
-                      type: string
+                  #  ----- Added line  ----------------------------------------
+                  $ref: '#/components/schemas/Artist'
+                  #  ---- /Added line  ----------------------------------------
         '400':
           description: Invalid request
           content:
@@ -67,18 +53,9 @@ paths:
         content:
           application/json:
             schema:
-              type: object 
-              required:
-                - username
-              properties:
-                artist_name:
-                  type: string
-                artist_genre:
-                  type: string
-                albums_recorded:
-                  type: integer
-                username:
-                  type: string
+              #  ----- Added line  ----------------------------------------
+              $ref: '#/components/schemas/Artist'
+              #  ---- /Added line  ----------------------------------------
       responses:
         '200':
           description: Successfully created a new artist
@@ -92,7 +69,6 @@ paths:
                   message:
                     type: string
 
-  #  ----- Added lines  ----------------------------------------
   /artists/{username}:
     get:
       description: Obtain information about an artist from his or her unique username
@@ -127,3 +103,26 @@ paths:
                 properties:           
                   message:
                     type: string
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  #  ----- Added lines  ----------------------------------------                
+  schemas:
+    Artist:
+      type: object
+      required:
+        - username
+      properties:
+        artist_name:
+          type: string
+        artist_genre:
+            type: string
+        albums_recorded:
+            type: integer
+        username:
+            type: string
+  #  ---- /Added lines  ----------------------------------------
